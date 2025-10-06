@@ -1,0 +1,296 @@
+<html lang="es"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maquiservicios Ferrey — Tarjeta Digital + QR</title>
+  <meta name="description" content="Venta de máquinas de coser industriales, repuestos y servicio técnico. Sedes Piura y Trujillo.">
+  <!-- Generador de QR desde CDN (ligero) -->
+  <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+  <style>
+    :root{
+      --bg:#0a0f16;--card:#0f1722;--muted:#9fb1c7;--text:#e9f1f7;--brand:#2bc0ff;--accent:#00c389;--ring:rgba(43,192,255,.25)
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#172132 0,#0a0f16 50%),#0a0f16;color:var(--text);font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, sans-serif}
+    .wrap{max-width:1100px;margin:28px auto;padding:16px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:999px;color:var(--muted);font-size:12px}
+    .grid{display:grid;grid-template-columns:420px 1fr;gap:20px}
+    @media (max-width: 980px){.grid{grid-template-columns:1fr}}
+    .card{background:rgba(15,23,34,.88);backdrop-filter: blur(8px);border:1px solid rgba(255,255,255,.08);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+    .p24{padding:22px}
+    h1{font-size:22px;margin:8px 0 0 0}
+    h2{font-size:18px;margin:0 0 12px 0}
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+    input,textarea,select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#0b121c;color:var(--text);outline:none}
+    input:focus,textarea:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--ring)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#111a28;color:var(--text);cursor:pointer;text-decoration:none}
+    .btn:hover{filter:brightness(1.1)}
+    .btn-primary{background:linear-gradient(180deg,#1976a5,#12597e);border-color:#13648e}
+    .btn-ok{background:linear-gradient(180deg,#22bb87,#178a65);border-color:#179b72}
+    .muted{color:var(--muted)}
+    .sep{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);margin:14px 0}
+
+    /* Preview */
+    .preview{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}
+    @media (max-width: 760px){.preview{grid-template-columns:1fr}}
+    .profile{display:flex;align-items:center;gap:14px}
+    .avatar{width:62px;height:62px;border-radius:16px;background:linear-gradient(135deg,#1b2735,#23384a);display:grid;place-items:center;font-weight:800;letter-spacing:.5px}
+    .title{font-size:24px;font-weight:800}
+    .subtitle{color:var(--muted);font-size:13px;margin-top:2px}
+    .list{display:grid;gap:10px;margin-top:14px}
+    .item{display:flex;gap:10px;align-items:center}
+    .item a{color:var(--brand);text-decoration:none}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);font-size:13px}
+    .qrbox{display:grid;place-items:center;background:#0d141c;border:1px dashed rgba(255,255,255,.1);border-radius:16px;padding:16px}
+    .footer{margin-top:8px;font-size:12px;color:var(--muted);text-align:center}
+    .map{width:100%;height:220px;border:0;border-radius:12px}
+
+    /* Print-only view (oculta editor) */
+    @media print{
+      header, .editor-controls, .form, .footer-global{display:none!important}
+      body{background:white}
+      .wrap{max-width:820px}
+      .card{box-shadow:none;border:0;background:white}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <span class="badge" title="Totalmente editable">Plantilla PRO editable</span>
+        <h1>Tarjeta Digital + Código QR — Maquiservicios Ferrey</h1>
+        <p class="muted" style="margin:6px 0 0 0">Completa/ajusta los datos a la izquierda. A la derecha verás tu tarjeta y el QR listo para imprimir o compartir.</p>
+      </div>
+      <div class="editor-controls" style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary" id="downloadHtml">Descargar <b>index.html</b></button>
+        <button class="btn btn-ok" id="downloadQR">Descargar <b>QR</b></button>
+        <button class="btn" id="printPdf">Imprimir / PDF</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- ==== PANEL DE EDICIÓN ==== -->
+      <section class="card p24 form">
+        <h2>1) Datos del negocio</h2>
+        <div class="row">
+          <div>
+            <label>Nombre del Negocio</label>
+            <input id="biz" value="Maquiservicios Ferrey">
+          </div>
+          <div>
+            <label>Slogan / Cargo</label>
+            <input id="tag" value="Líder en maquinaria textil — Dimmer J. Díaz Contreras (Gerente Comercial)">
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>WhatsApp principal (solo números con código país)</label>
+            <input id="wa1" value="51 959374013">
+          </div>
+          <div>
+            <label>WhatsApp secundario</label>
+            <input id="wa2" value="51 948210008">
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Email</label>
+            <input id="email" value="maquiservicios_ferrey@hotmail.com">
+          </div>
+          <div>
+            <label>Link principal (URL pública de esta tarjeta)</label>
+            <input id="url" placeholder="https://tutarjeta.com/ferrey">
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Dirección 1 (Piura)</label>
+            <input id="addr1" value="Jr. Callao 625, Piura">
+          </div>
+          <div>
+            <label>Dirección 2 (Trujillo)</label>
+            <input id="addr2" value="Jr. Ayacucho N° 745, Trujillo">
+          </div>
+        </div>
+        <div class="row-3">
+          <div>
+            <label>Facebook</label>
+            <input id="fb" value="https://facebook.com/Maqi-Ferrey">
+          </div>
+          <div>
+            <label>Instagram</label>
+            <input id="ig" value="https://instagram.com/maquiservicios_ferrey">
+          </div>
+          <div>
+            <label>TikTok</label>
+            <input id="tt" placeholder="https://tiktok.com/@usuario">
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <label>Descripción</label>
+          <textarea id="desc" rows="3" style="width: 372px; height: 116px;">Venta de máquinas de coser para la industria textil, tapicería y calzado; repuestos en general y servicio técnico.</textarea>
+        </div>
+        <div class="sep"></div>
+        <h2>2) Contenido del QR</h2>
+        <div class="row">
+          <div>
+            <label>¿Qué quieres que abra el QR?</label>
+            <select id="qrMode">
+              <option value="link">Mi tarjeta web (link principal)</option>
+              <option value="whatsapp1">WhatsApp principal</option>
+              <option value="whatsapp2">WhatsApp secundario</option>
+              <option value="maps1">Ubicación: Piura</option>
+              <option value="maps2">Ubicación: Trujillo</option>
+              <option value="vcard">Contacto (vCard)</option>
+            </select>
+          </div>
+          <div>
+            <label>Tamaño del QR (px)</label>
+            <input id="qrSize" type="number" min="160" max="1024" value="300">
+          </div>
+        </div>
+        <p class="muted" style="margin-top:8px">Publica este archivo (GitHub Pages/Netlify/Vercel/Drive público), pega la URL en “Link principal” y elige “Mi tarjeta web” para que el QR muestre <b>toda</b> la información.</p>
+      </section>
+
+      <!-- ==== PREVIEW ==== -->
+      <section class="card p24">
+        <div class="preview">
+          <div>
+            <div class="profile">
+              <div class="avatar" id="avatar">MF</div>
+              <div>
+                <div class="title" id="pBiz">Maquiservicios Ferrey</div>
+                <div class="subtitle" id="pTag">Líder en maquinaria textil — Dimmer J. Díaz Contreras (Gerente Comercial)</div>
+              </div>
+            </div>
+
+            <div class="list">
+              <div class="item">📍
+                <div style="display:grid;gap:6px">
+                  <a id="pAddr1" href="https://www.google.com/maps/search/?api=1&amp;query=Jr.%20Callao%20625%2C%20Piura" target="_blank" rel="noopener" class="pill">Piura — Jr. Callao 625</a>
+                  <a id="pAddr2" href="https://www.google.com/maps/search/?api=1&amp;query=Jr.%20Ayacucho%20N%C2%B0%20745%2C%20Trujillo" target="_blank" rel="noopener" class="pill">Trujillo — Jr. Ayacucho N° 745</a>
+                </div>
+              </div>
+              <div class="item">💬
+                <div class="pill"><a id="pWa1" href="https://wa.me/51959374013?text=Hola%2C%20deseo%20informaci%C3%B3n" target="_blank" rel="noopener">WhatsApp principal</a></div>
+                <div class="pill"><a id="pWa2" href="https://wa.me/51948210008?text=Hola%2C%20deseo%20informaci%C3%B3n" target="_blank" rel="noopener">WhatsApp secundario</a></div>
+              </div>
+              <div class="item">✉️
+                <a id="pEmail" class="pill" href="mailto:maquiservicios_ferrey@hotmail.com" target="_blank" rel="noopener">Correo</a>
+              </div>
+              <div class="item">🌐
+                <a id="pUrl" class="pill" href="#" target="_blank" rel="noopener">Link principal</a>
+              </div>
+              <div class="item">📱
+                <span style="display:flex;gap:8px;flex-wrap:wrap">
+                  <a id="pFb" class="pill" href="https://facebook.com/Maqi-Ferrey" target="_blank" rel="noopener">Facebook</a>
+                  <a id="pIg" class="pill" href="https://instagram.com/maquiservicios_ferrey" target="_blank" rel="noopener">Instagram</a>
+                  <a id="pTt" class="pill" href="#" target="_blank" rel="noopener">TikTok</a>
+                </span>
+              </div>
+            </div>
+
+            <div class="sep"></div>
+            <div id="pDesc" class="muted">Venta de máquinas de coser para la industria textil, tapicería y calzado; repuestos en general y servicio técnico.</div>
+            <div class="sep"></div>
+            <iframe id="map" class="map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Jr.%20Callao%20625%2C%20Piura&amp;output=embed"></iframe>
+          </div>
+          <div>
+            <div class="qrbox"><div id="qrcode" title="file:///F:/DESCARAGS/tarjeta_digital_pro_qr_maquiservicios_ferrey_final.html"><canvas width="300" height="300" style="display: none;"></canvas><img src="data:image/png;base64,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" style="display: block;"></div></div>
+            <div class="footer">QR de <span id="qrLabel">mi tarjeta web</span></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="footer-global muted" style="margin-top:18px">Listo para compartir por WhatsApp o imprimir. ©</footer>
+  </div>
+
+  <script>
+    // Helpers
+    const $ = (id)=>document.getElementById(id);
+    const encode = (s)=>encodeURIComponent(s.trim());
+
+    // Construir links
+    function phoneDigits(v){return v.replace(/\D+/g,'');}
+    function waLink(num,text='Hola, deseo información'){return `https://wa.me/${phoneDigits(num)}?text=${encode(text)}`}
+    function mapLink(addr){return `https://www.google.com/maps/search/?api=1&query=${encode(addr)}`}
+    function mailLink(email){return `mailto:${email}`}
+
+    function updatePreview(){
+      const biz=$('biz').value, tag=$('tag').value;
+      const wa1=$('wa1').value, wa2=$('wa2').value;
+      const email=$('email').value, url=$('url').value;
+      const addr1=$('addr1').value, addr2=$('addr2').value;
+      const fb=$('fb').value, ig=$('ig').value, tt=$('tt').value;
+      const desc=$('desc').value;
+
+      $('pBiz').textContent=biz||'Tu negocio';
+      $('pTag').textContent=tag||'';
+      $('avatar').textContent=(biz||'MF').split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
+
+      $('pWa1').href=waLink(wa1);
+      $('pWa2').href=waLink(wa2);
+      $('pEmail').href=mailLink(email);
+      $('pUrl').href=url||'#';
+
+      $('pAddr1').href=mapLink(addr1);
+      $('pAddr2').href=mapLink(addr2);
+
+      $('pFb').href=fb||'#';
+      $('pIg').href=ig||'#';
+      $('pTt').href=tt||'#';
+
+      $('pDesc').textContent=desc||'';
+
+      // mapa embebido (usa la dirección 1)
+      $('map').src=`https://www.google.com/maps?q=${encode(addr1)}&output=embed`;
+
+      // Generar QR
+      const mode=$('qrMode').value;
+      const size=parseInt($('qrSize').value||300,10);
+      let qrTarget = url || window.location.href; // por defecto apunta a la tarjeta
+      let label = 'mi tarjeta web';
+      if(mode==='whatsapp1'){qrTarget=waLink(wa1);label='WhatsApp (principal)'}
+      if(mode==='whatsapp2'){qrTarget=waLink(wa2);label='WhatsApp (secundario)'}
+      if(mode==='maps1'){qrTarget=mapLink(addr1);label='Ubicación Piura'}
+      if(mode==='maps2'){qrTarget=mapLink(addr2);label='Ubicación Trujillo'}
+      if(mode==='vcard'){
+        const v = `BEGIN:VCARD\nVERSION:3.0\nN:${biz};;;\nFN:${biz}\nTEL;TYPE=CELL:${phoneDigits(wa1)}\nEMAIL:${email}\nURL:${url}\nADR;TYPE=WORK:;;${addr1};;;;\nEND:VCARD`;
+        qrTarget = 'data:text/vcard;charset=utf-8,'+encodeURIComponent(v);
+        label='vCard (contacto)';
+      }
+      $('qrLabel').textContent = label;
+      const box=$('qrcode');
+      box.innerHTML='';
+      new QRCode(box,{text:qrTarget,width:size,height:size,correctLevel:QRCode.CorrectLevel.M});
+
+      // Descargar QR
+      $('downloadQR').onclick=()=>{
+        const img=box.querySelector('img')||box.querySelector('canvas');
+        const dataUrl = img.tagName==='IMG'?img.src:img.toDataURL('image/png');
+        const a=document.createElement('a');
+        a.href=dataUrl;a.download='qr_ferrey.png';a.click();
+      };
+    }
+
+    ['biz','tag','wa1','wa2','email','url','addr1','addr2','fb','ig','tt','desc','qrMode','qrSize'].forEach(id=>{
+      $(id).addEventListener('input', updatePreview);
+      $(id).addEventListener('change', updatePreview);
+    });
+
+    // Descargar HTML autoconclusivo
+    $('downloadHtml').onclick=()=>{
+      const blob=new Blob([document.documentElement.outerHTML],{type:'text/html;charset=utf-8'});
+      const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='index.html';a.click();
+    };
+
+    $('printPdf').onclick=()=>window.print();
+
+    updatePreview();
+  </script>
+
+</body></html>
